@@ -12,4 +12,6 @@ project/
     └── index.html   
 </pre>
     
-<img src="Content/demo-web.gif" alt="Detection Example"/>
+<p align="center">
+  <img src="Content/demo-web.gif" alt="Detection Example"/>
+</p>
