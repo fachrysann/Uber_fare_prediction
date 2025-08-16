@@ -1,1 +1,1 @@
-<img src="Content/demo.gif" alt="Detection Example"/>
+<img src="Content/demo-web.gif" alt="Detection Example"/>
