@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber Fare Predictor</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4 bg-primary text-white">
+            <div class="header-left d-flex align-items-center">
+                <h1 class="h4 m-0">Uber</h1>
+            </div>
+            <nav class="header-nav">
+                <!--<a href="#" class="text-white text-decoration-none me-3">Home</a>
+                <a href="#" class="text-white text-decoration-none me-3">How It Works</a>-->
+                <a href="#" class="text-white text-decoration-none">Support</a>
+            </nav>
+        </div>
+    </header>
+    <div class="main-container">
+        <!-- Left Panel - Form Controls -->
+        <div class="left-panel">
+            <div class="header-image">
+                <img src="{{ url_for('static', filename='images/concept1.jpg') }}" alt="Uber Car" />
+            </div>
+
+            <div class="panel-header">
+                <h2><i class="fas fa-car"></i> Uber Fare Predictor</h2>
+                <div class="subtitle">Get accurate fare estimates for your trip</div>
+            </div>
+            
+            <div class="panel-content">
+                <!-- Progress Indicator - Fixed centering -->
+                <div class="progress-indicator">
+                    <div class="progress-wrapper">
+                        <div class="step" id="step-locations">
+                            <div class="step-icon">1</div>
+                            <div class="step-connector"></div>
+                            <div class="step-label">Locations</div>
+                        </div>
+                        <div class="step" id="step-schedule">
+                            <div class="step-icon">2</div>
+                            <div class="step-connector"></div>
+                            <div class="step-label">Schedule</div>
+                        </div>
+                        <div class="step" id="step-passengers">
+                            <div class="step-icon">3</div>
+                            <div class="step-connector"></div>
+                            <div class="step-label">Passengers</div>
+                        </div>
+                        <div class="step" id="step-estimate">
+                            <div class="step-icon"><i class="fas fa-check"></i></div>
+                            <div class="step-label">Estimate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Display -->
+                {% if error %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Error:</strong> {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="POST" onsubmit="return validateAndSubmitForm()" id="predictionForm">
+                    <!-- Hidden inputs for coordinates -->
+                    <input type="hidden" id="pickup_lat" name="pickup_lat" value="">
+                    <input type="hidden" id="pickup_lon" name="pickup_lon" value="">
+                    <input type="hidden" id="dropoff_lat" name="dropoff_lat" value="">
+                    <input type="hidden" id="dropoff_lon" name="dropoff_lon" value="">
+                    <input type="hidden" id="passenger_count" name="passenger_count" value="1">
+
+                    <!-- Instructions -->
+                    <div class="form-section">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Getting Started:</strong> Click on the map to select your pickup location, then choose your destination. We'll calculate the best route and fare estimate for you.
+                        </div>
+                    </div>
+
+                    <!-- Pickup Card -->
+                    <div class="location-card" id="pickup-card">
+                        <div class="location-header">
+                            <div class="location-title">
+                                <div class="location-icon pickup-icon">
+                                    <!-- Black circle with white inner circle -->
+                                    <svg width="32" height="32" viewBox="0 0 32 32">
+                                        <circle cx="16" cy="16" r="12.8" fill="black" />
+                                        <circle cx="16" cy="16" r="3.84" fill="white" />
+                                    </svg>
+                                </div>
+                                <span id="pickup-status">Select pickup location</span>
+                            </div>
+                        </div>
+                        <div id="pickup-coords" class="coordinate-display" style="display: none;"></div>
+                    </div>
+
+                    <!-- Dropoff Card -->
+                    <div class="location-card" id="dropoff-card">
+                        <div class="location-header">
+                            <div class="location-title">
+                                <div class="location-icon dropoff-icon">
+                                    <!-- Black square with white inner square -->
+                                    <svg width="32" height="32" viewBox="0 0 32 32">
+                                        <rect x="3.2" y="3.2" width="25.6" height="25.6" fill="black" />
+                                        <rect x="12.16" y="12.16" width="7.68" height="7.68" fill="white" />
+                                    </svg>
+                                </div>
+                                <span id="dropoff-status">Select destination</span>
+                            </div>
+                        </div>
+                        <div id="dropoff-coords" class="coordinate-display" style="display: none;"></div>
+                    </div>
+
+                    <!-- Date and Time -->
+                    <div class="form-section" id="schedule-section">
+                        <h5><i class="fas fa-calendar-alt"></i> Trip Schedule</h5>
+
+                        <div class="mb-3">
+                            <label for="date" class="form-label">
+                                <i class="fas fa-calendar"></i> Departure Date
+                            </label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="hour" class="form-label">
+                                <i class="fas fa-clock"></i> Departure Time
+                            </label>
+                            <select id="hour" name="hour" class="form-select" required>
+                                <option value="">Choose departure time</option>
+                                {% for h in range(24) %}
+                                <option value="{{h}}">{{"%02d"|format(h)}}:00 ({{ "AM" if h < 12 else "PM" }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Passenger Count -->
+                    <div class="form-section" id="passengers-section">
+                        <h5><i class="fas fa-users"></i>Passengers</h5>
+                        <label class="form-label">How many passengers?</label>
+                        <div class="passenger-selection">
+                            {% for i in range(1,7) %}
+                            <button type="button" class="passenger-btn" onclick="setPassengers({{i}})">
+                                <i class="fas fa-user{% if i > 1 %}s{% endif %}"></i>
+                                <span>{{i}} </span>
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-section" id="actions-section">
+                        <button type="submit" id="submitBtn" class="btn btn-primary-custom btn-lg w-100 mb-3">
+                            <span id="submitText">
+                                <i class="fas fa-calculator"></i>
+                                See Prices
+                            </span>
+                            <div id="loadingSpinner" class="loading-spinner d-none"></div>
+                        </button>
+                        <button type="button" class="btn btn-secondary-custom btn-lg w-100" onclick="resetForm()">
+                            <i class="fas fa-redo"></i>
+                            Start New Trip
+                        </button>
+                    </div>
+
+                    <!-- Prediction Result -->
+                    {% if predicted_fare and success %}
+                    <div class="form-section" id="results-section">
+                        <div class="prediction-result">
+                            <div class="prediction-content">
+                                <h4><i class="fas fa-receipt"></i> Your Fare Estimate</h4>
+                                <div class="fare-amount">{{ predicted_fare }}</div>
+                                
+                                <div class="trip-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-route"></i> Distance
+                                        </div>
+                                        <div class="detail-value">{{ distance_km }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">
+                                            <i class="fas fa-clock"></i> Est. Duration
+                                        </div>
+                                        <div class="detail-value">~15-25 min</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    This estimate includes distance, time, and current demand factors. Actual fare may vary based on traffic conditions and surge pricing.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Debug info (only in development) -->
+                    {% if config.DEBUG %}
+                    <div class="form-section">
+                        <details>
+                            <summary><i class="fas fa-bug"></i> Debug Information</summary>
+                            <div class="mt-3">
+                                <div class="coordinate-display">
+                                    <strong>Debug Data:</strong><br>
+                                    Current Date: {{ current_date or 'Not set' }}<br>
+                                    Success: {{ success or 'False' }}<br>
+                                    Route Points: {{ route_coords|length if route_coords else 0 }}
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Panel - Map -->
+        <div class="right-panel">
+            <div id="map"></div>
+            <div class="map-overlay">
+                <div class="map-status">
+                    <span id="map-instruction">Click to select pickup location</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <div id="successToast" class="toast toast-custom" role="alert">
+            <div class="toast-header">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const CURRENT_DATE = "{{ current_date or '' }}";
+        const ROUTE_COORDS = {{ route_coords|default([])|tojson }};
+        const DISTANCE_KM = "{{ distance_km or '' }}";
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
