@@ -69,7 +69,7 @@ project/
 | 📏 **RMSE** | 3.679 |
 | 📊 **R²**   | 0.831 |
 
-✅ Using **OSMnx-based road distances** significantly improves accuracy compared to straight-line distances, making the fare predictions more realistic and reliable.  
+✅ Since the dataset is synthetic, certain features may not be correlated, and therefore the accuracy is slightly affected.
 
 ---
 
