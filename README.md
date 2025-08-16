@@ -1,12 +1,20 @@
+# 🚖 Uber Fare Prediction with XGBoost & OSMnx
+
+This project focuses on **Uber Inc.**, the world's largest taxi company.  
+The main goal is to **predict the fare amount** for future trips using **machine learning models**.  
+By leveraging **real road distances from OSMnx** instead of Euclidean straight-line distances, the prediction model achieves **higher accuracy** and provides more realistic estimates.  
+
+---
+
 ## 🔧 Key Features
 
-| Feature                          | Description                                                                 |
-|----------------------------------|-----------------------------------------------------------------------------|
-| 🧹 Data Cleaning                 | Handle missing values, outliers, and incorrect passenger counts             |
-| 🌍 Road Network Distance          | Compute **real driving routes** using **OSMnx** instead of Euclidean distance |
-| ⚡ Machine Learning Model         | Implemented **XGBoost** regression for fare prediction                      |
-| 📊 Evaluation Metrics             | Compare models using **R², RMSE, and MSE**                                 |
-| 🎨 Web App Deployment            | Flask-based interface to test predictions interactively                     |
+| Feature                  | Description                                                                 |
+|---------------------------|-----------------------------------------------------------------------------|
+| 🧹 **Data Cleaning**      | Handle missing values, outliers, and incorrect passenger counts             |
+| 🌍 **Road Network Distance** | Compute **real driving routes** using **OSMnx** instead of Euclidean distance |
+| ⚡ **Machine Learning**   | Implemented **XGBoost** regression for fare prediction                      |
+| 📊 **Evaluation Metrics** | Compared model performance using **R², RMSE, and MAE**                      |
+| 🎨 **Web App Deployment** | Flask-based interface to test predictions interactively                     |
 
 ---
 
@@ -27,7 +35,7 @@ The dataset (sourced from **Kaggle**) contains the following fields:
 ## 🎯 Objective
 1. Understand and clean the dataset (if required).  
 2. Build **regression models** to predict Uber ride fares.  
-3. Evaluate and compare models using metrics such as **R², RMSE, and MSE**.  
+3. Evaluate and compare models using **R², RMSE, and MAE**.  
 
 ---
 
@@ -50,8 +58,20 @@ project/
 
 ## 🎥 Demo
 <p align="center">
-  <img src="Content/demo-web.gif" alt="Detection Example"/>
+  <img src="Content/demo-web.gif" alt="App Demo"/>
 </p>
+
+---
+
+## 📈 Results
+
+| Metric | Value |
+|--------|-------|
+| 🧮 **MAE**  | 1.918 |
+| 📏 **RMSE** | 3.679 |
+| 📊 **R²**   | 0.831 |
+
+✅ Using **OSMnx-based road distances** significantly improves accuracy compared to straight-line distances, making the fare predictions more realistic and reliable.  
 
 ---
 
@@ -62,11 +82,3 @@ project/
 <pre>python app.py</pre>
 3. Open in browser  
 <pre>http://localhost:5000</pre>
-
-| Metric | Value |
-|--------|-------|
-| 🧮 **MAE**  | 1.918 |
-| 📏 **RMSE** | 3.679 |
-| 📊 **R²**   | 0.831 |
-
-✅ The results show that incorporating **real road distances from OSMnx** significantly improves the model’s accuracy compared to using straight-line (Euclidean) distances.  
