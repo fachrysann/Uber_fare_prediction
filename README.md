@@ -43,6 +43,8 @@ project/
 └── templates/           
     └── index.html   
 </pre>
+
+---
     
 <p align="center">
   <img src="Content/demo-web.gif" alt="Detection Example"/>
