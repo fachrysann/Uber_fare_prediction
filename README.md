@@ -69,7 +69,7 @@ project/
 | 📏 **RMSE** | 3.679 |
 | 📊 **R²**   | 0.831 |
 
-✅ Since the dataset is synthetic, certain features may not be correlated, and therefore the accuracy is slightly affected.
+Since the dataset is synthetic, certain features may not be correlated, and therefore the accuracy is slightly affected.
 
 ---
 
