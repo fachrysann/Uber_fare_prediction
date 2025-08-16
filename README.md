@@ -6,12 +6,7 @@ This project focuses on **Uber Inc.**, the world's largest taxi company. The mai
 
 ## 🚀 Approach
 
-For this project, the prediction task is handled using **XGBoost**, a powerful gradient boosting algorithm well-suited for regression problems.  
-
-Instead of simply calculating a straight-line (Euclidean) distance between the pickup and dropoff points, I utilized **OSMnx** to extract the actual road network and compute the **true driving route**.  
-This allows the model to use more realistic and precise distance features, since real-world routes often differ significantly from a straight line.  
-
-By incorporating accurate route distances along with other trip features, the resulting model achieves **higher accuracy and better generalization**, making the fare prediction more reliable compared to using naive distance measures.
+For this project, the prediction task is handled using **XGBoost**, a powerful gradient boosting algorithm well-suited for regression problems. Instead of simply calculating a straight-line (Euclidean) distance between the pickup and dropoff points, I utilized **OSMnx** to extract the actual road network and compute the **true driving route**. This allows the model to use more realistic and precise distance features, since real-world routes often differ significantly from a straight line. By incorporating accurate route distances along with other trip features, the resulting model achieves **higher accuracy and better generalization**, making the fare prediction more reliable compared to using naive distance measures.
 
 ---
 
