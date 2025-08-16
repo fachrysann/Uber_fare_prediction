@@ -80,3 +80,5 @@ project/
 <pre>python app.py</pre>
 3. Open in browser  
 <pre>http://localhost:5000</pre>
+
+✨ Takeaway: This project combines geospatial analysis (OSMnx) with machine learning (XGBoost) and web deployment (Flask), showcasing an end-to-end workflow from raw data to an interactive prediction system.
