@@ -1,8 +1,6 @@
 # 🚖 Uber Fare Prediction with XGBoost & OSMnx
 
-This project focuses on **Uber Inc.**, the world's largest taxi company.  
-The main goal is to **predict the fare amount** for future trips using **machine learning models**.  
-By leveraging **real road distances from OSMnx** instead of Euclidean straight-line distances, the prediction model achieves **higher accuracy** and provides more realistic estimates.  
+This project focuses on **Uber Inc.**, the world's largest taxi company. The main goal is to **predict the fare amount** for future trips using **machine learning models**. By leveraging **real road distances from OSMnx** instead of Euclidean straight-line distances, the prediction model achieves **higher accuracy** and provides more realistic estimates.  
 
 ---
 
