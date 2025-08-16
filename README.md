@@ -54,7 +54,7 @@ project/
 
 ---
 
-## 🎥 Demo
+## 🎥 Web Demo
 <p align="center">
   <img src="Content/demo-web.gif" alt="App Demo"/>
 </p>
