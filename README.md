@@ -56,7 +56,7 @@ project/
 
 ## 🎥 Web Interface
 <p align="center">
-  <img src="Content/demo-web.png" alt="App Demo"/>
+  <img src="Content/demo-fare-1.png" alt="App Demo"/>
 </p>
 
 ---
