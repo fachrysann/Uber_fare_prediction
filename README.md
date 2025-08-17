@@ -54,9 +54,9 @@ project/
 
 ---
 
-## 🎥 Web Demo
+## 🎥 Web Interface
 <p align="center">
-  <img src="Content/demo-web.gif" alt="App Demo"/>
+  <img src="Content/demo-web.png" alt="App Demo"/>
 </p>
 
 ---
